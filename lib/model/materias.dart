@@ -1,7 +1,7 @@
 class Materia{
   final int id;
   String nomeMateria;
-  DateTime dataEscolhida;
+  String dataEscolhida;
   String anotacoes;
   String pathImg;
   String pathPdf;

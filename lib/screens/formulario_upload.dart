@@ -27,7 +27,16 @@ class _FormularioState extends State<Formulario> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget.materia);
+    if(widget.materia.anotacoes != null){
+      anotacaotField.text = widget.materia.anotacoes;
+    }
+    if(widget.materia.dataEscolhida != null){
+      DateTime myDate = DateTime.parse(widget.materia.dataEscolhida);
+      dataTextField.text = "${myDate.day}/${myDate.month}/${myDate.year}";
+    }
+    anotacaotField.addListener(() {
+    widget.materia.anotacoes = anotacaotField.text;
+    });
   }
 
   @override
@@ -83,7 +92,6 @@ class _FormularioState extends State<Formulario> {
                           borderSide:
                               BorderSide(color: Colors.grey, width: 2.0)),
                     ),
-                    onTap: () => widget.materia.anotacoes = anotacaotField.text,
                   ),
                 ),
                 Center(
@@ -254,14 +262,14 @@ class _FormularioState extends State<Formulario> {
       lastDate: DateTime(2030),
       builder: (BuildContext context, Widget child) {
         return Theme(
-          data: ThemeData.dark(),
+          data: ThemeData.light(),
           child: child,
         );
       },
     );
     if (date != null) {
       selectedDate = date;
-      widget.materia.dataEscolhida = date;
+      widget.materia.dataEscolhida = date.toIso8601String();
       dataTextField.text = "${date.day}/${date.month}/${date.year}";
     }
   }
