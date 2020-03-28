@@ -1,19 +1,35 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
+import 'package:trabalho_sistemas/componentes/dialog_custom.dart';
+import 'package:trabalho_sistemas/componentes/flushbar_custom.dart';
+import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
+import 'package:trabalho_sistemas/model/materias.dart';
 
 class Formulario extends StatefulWidget {
   @override
   _FormularioState createState() => _FormularioState();
+  Materia materia = Materia();
+
+  Formulario(this.materia);
 }
 
 class _FormularioState extends State<Formulario> {
   DateTime selectedDate;
   TextEditingController dataTextField = new TextEditingController();
   TextEditingController anotacaotField = new TextEditingController();
-  List<File> files = List();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.materia);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -67,7 +83,7 @@ class _FormularioState extends State<Formulario> {
                           borderSide:
                               BorderSide(color: Colors.grey, width: 2.0)),
                     ),
-                    onTap: () => print(anotacaotField.text),
+                    onTap: () => widget.materia.anotacoes = anotacaotField.text,
                   ),
                 ),
                 Center(
@@ -75,66 +91,67 @@ class _FormularioState extends State<Formulario> {
                   padding: EdgeInsets.all(15.0),
                   child: GestureDetector(
                     child: Container(
-
-                      height: 100,
+                        height: 100,
                         width: 100,
                         foregroundDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all( width: 2.0,color: Colors.orangeAccent)),
-                        child: Icon(Icons.photo_camera
-                        ,size: 40.0,color: Colors.grey,)),
+                            border: Border.all(
+                                width: 2.0, color: Colors.orangeAccent)),
+                        child: Icon(
+                          Icons.photo_camera,
+                          size: 40.0,
+                          color: Colors.grey,
+                        )),
                     onTap: () => openFile(FileType.image),
                   ),
                 )),
                 Center(
                     child: Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: GestureDetector(
-                        child: Container(
-
-                            height: 100,
-                            width: 100,
-                            foregroundDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                border: Border.all( width: 2.0,color: Colors.orangeAccent)),
-                            child: Icon(Icons.picture_as_pdf
-                              ,size: 40.0,color: Colors.grey,)),
-                        onTap: () => openFile(FileType.custom),
-                      ),
-                    )),
-                RaisedButton(
-                  onPressed: () {
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 100,
-                    child: Row(
-                     children: <Widget>[
-                       Icon(Icons.save,color: Colors.white,),
-                       Text(
-                         "Salvar",
-                         style: TextStyle(color: Colors.white),
-                       ),
-                     ],
-                    ),
+                  padding: EdgeInsets.all(15.0),
+                  child: GestureDetector(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        foregroundDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                                width: 2.0, color: Colors.orangeAccent)),
+                        child: Icon(
+                          Icons.picture_as_pdf,
+                          size: 40.0,
+                          color: Colors.grey,
+                        )),
+                    onTap: () => openFile(FileType.custom),
                   ),
-                  color: Colors.orange,
-                ),
+                )),
                 RaisedButton(
                   onPressed: () {
-                    OpenFile.open(files[1].path).catchError((e){
-                      print(e);
-                    });
-
+                    if (widget.materia.pathPdf == null ||
+                        widget.materia.pathImg == null ||
+                        widget.materia.anotacoes == null ||
+                        widget.materia.dataEscolhida == null) {
+                      FlusBarCustom(
+                          "Preencha todos os campos.",
+                          context,
+                          Icon(
+                            Icons.error,
+                            color: Colors.orangeAccent,
+                          )).flushbar();
+                    } else {
+                      saveDocuments(context);
+                    }
                   },
                   child: Container(
                     height: 50,
                     width: 100,
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.open_in_browser,color: Colors.white,),
+                        Icon(
+                          Icons.save,
+                          color: Colors.white,
+                        ),
                         Text(
-                          "Abrir Arquivo",
+                          "Salvar",
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -142,6 +159,30 @@ class _FormularioState extends State<Formulario> {
                   ),
                   color: Colors.orange,
                 ),
+//                RaisedButton(
+//                  onPressed: () {
+//                    OpenFile.open(files[1].path).catchError((e) {
+//                      print(e);
+//                    });
+//                  },
+//                  child: Container(
+//                    height: 50,
+//                    width: 100,
+//                    child: Row(
+//                      children: <Widget>[
+//                        Icon(
+//                          Icons.open_in_browser,
+//                          color: Colors.white,
+//                        ),
+//                        Text(
+//                          "Ultimo Arquivo",
+//                          style: TextStyle(color: Colors.white),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                  color: Colors.orange,
+//                ),
               ],
             ),
           ),
@@ -149,15 +190,61 @@ class _FormularioState extends State<Formulario> {
       ),
     );
   }
-    void openFile(FileType fileType) async{
-       var file = await FilePicker.getFile(type:fileType,fileExtension: "PDF");
-       files.add(file);
-       setState(() {
-        print(files);
-      });
+
+  void openFile(FileType fileType) async {
+    var file = await FilePicker.getFile(type: fileType, fileExtension: "PDF");
+    setState(() {
+      if (fileType == FileType.image) {
+        widget.materia.pathImg = file.path;
+      } else {
+        widget.materia.pathPdf = file.path;
+      }
+    });
   }
 
-
+  Future<void> saveDocuments(BuildContext mContext) async {
+    MateriaDao dao = MateriaDao();
+    FutureBuilder(
+        future: Future.delayed(Duration(seconds: 1))
+            .then((value) => dao.update(widget.materia)),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SpinKitSquareCircle(
+                      color: Colors.orangeAccent,
+                      size: 50.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 35.0),
+                      child: Text(
+                        'Carregando...',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: Colors.black54),
+                      ),
+                    )
+                  ],
+                ),
+              );
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              DialogCustom.showCustomDialog(mContext, "Salvo com Sucesso",
+                  "Dados foram salvos no lembrete", DialogType.SUCCES);
+              break;
+          }
+          return null;
+        });
+  }
 
   void datePicker(BuildContext mContext) async {
     DateTime date = await showDatePicker(
@@ -174,6 +261,7 @@ class _FormularioState extends State<Formulario> {
     );
     if (date != null) {
       selectedDate = date;
+      widget.materia.dataEscolhida = date;
       dataTextField.text = "${date.day}/${date.month}/${date.year}";
     }
   }

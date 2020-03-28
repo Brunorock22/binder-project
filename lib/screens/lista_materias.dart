@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trabalho_sistemas/componentes/card_materia.dart';
+import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
 import 'package:trabalho_sistemas/screens/formulario_upload.dart';
 
@@ -9,23 +11,59 @@ class ListaMaterias extends StatefulWidget {
 }
 
 class _ListaMateriasState extends State<ListaMaterias> {
-  List<Materia> listMaterias = List();
   TextEditingController nomeMateriaController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    MateriaDao dao = MateriaDao();
+
     return Scaffold(
-      body: ListView.builder(
-          itemCount: listMaterias.length,
-          itemBuilder: (context, indice) {
-            return GestureDetector(
-              child: CardMateria(listMaterias[indice].nome),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Formulario()))
-            );
-          }),
+      body: FutureBuilder(
+        future: Future.delayed(Duration(seconds: 1)).then((value) => dao.findAll()),
+        builder: (context, snapshot){
+          switch(snapshot.connectionState){
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SpinKitSquareCircle(
+
+                color: Colors.orangeAccent,
+                  size: 50.0,
+                ),
+                    Padding(
+                      padding: const EdgeInsets.only(top : 35.0),
+                      child: Text('Carregando...',style: TextStyle(fontWeight: FontWeight.w400,fontSize: 14,color: Colors.black54),),
+                    )
+                  ],
+                ),
+              );
+              break;
+            case ConnectionState.active:
+                break;
+            case ConnectionState.done:
+              final List<Materia> materias = snapshot.data;
+              return ListView.builder(
+                  itemCount: materias.length,
+                  itemBuilder: (context, indice) {
+                    final Materia materia = materias[indice];
+                    return GestureDetector(
+                        child: CardMateria(materia),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Formulario(materia)))
+                    );
+                  });
+              break;
+          }
+          return null;
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          DialogSalvar(context);
+          DialogSalvar(context,dao);
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.orange,
@@ -33,7 +71,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
     );
   }
 
-  void DialogSalvar(BuildContext context) {
+  void DialogSalvar(BuildContext context,MateriaDao dao) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -61,8 +99,9 @@ class _ListaMateriasState extends State<ListaMaterias> {
                         onPressed: () {
                           print(nomeMateriaController.text);
                           setState(() {
-                            listMaterias
-                                .add(Materia(nomeMateriaController.text));
+                            dao.save(Materia( nomeMateria: nomeMateriaController.text)).then((value){
+                              print(value);
+                            });
                             nomeMateriaController.text = "";
                             Navigator.of(context, rootNavigator: true).pop();
                           });

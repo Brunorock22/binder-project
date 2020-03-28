@@ -27,38 +27,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
 
-  void showPageByNotification(Map map) {
-    bool b = map.containsKey("screen");
-    if (b) {
-      int id = int.parse(map["click_action_id"]);
-      String screen = map["screen"];
-
-      switch (screen) {
-        case "noticia":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetailsScreen.fromID(id)));
-          break;
-        case "chamado_status":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => MyCallsDetailsScreen.fromID(id)));
-          break;
-        case "notificacao":
-          break;
-        case "cidadao":
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => ExternalMessageDetailsScreen(id)));
-          break;
-      }
-    }
-  }
-
-  Future onSelectNotification(String payload) async {
-    if (payload != null) {
-      Map map = json.decode(payload);
-      showPageByNotification(map);
-      debugPrint('Notification payload: $payload');
-    }
-//    await Navigator.push(context,
-//        new MaterialPageRoute(builder: (context) => new SecondRoute()));
-  }
-
   Future onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
     // display a dialog with the notification details, tap ok to go to another page

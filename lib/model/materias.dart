@@ -1,5 +1,22 @@
 class Materia{
-  String nome;
+  final int id;
+  String nomeMateria;
+  DateTime dataEscolhida;
+  String anotacoes;
+  String pathImg;
+  String pathPdf;
 
-  Materia(this.nome);
+  Materia({this.id, this.nomeMateria, this.dataEscolhida, this.anotacoes,
+      this.pathImg, this.pathPdf});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'nome_materia': nomeMateria,
+      'data_escolhida': dataEscolhida,
+      'anotacoes': anotacoes,
+      'path_pdf': pathImg,
+      'path_img': pathPdf,
+    };
+  }
 }

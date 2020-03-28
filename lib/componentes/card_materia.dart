@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_sistemas/model/materias.dart';
 
 class CardMateria extends StatelessWidget {
-  String nomeMateria;
+  Materia materia;
 
-  CardMateria(this.nomeMateria);
+  CardMateria(this.materia);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class CardMateria extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
-                child: Text(nomeMateria),
+                child: Text(materia.nomeMateria),
               )
             ],
           )

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'componentes/NavigatioBar.dart';
+import 'componentes/main_screen.dart';
 
 void main() => runApp(MyApp());
 
