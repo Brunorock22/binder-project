@@ -4,6 +4,7 @@ import 'package:trabalho_sistemas/componentes/card_materia.dart';
 import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
 import 'package:trabalho_sistemas/screens/formulario_upload.dart';
+import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class ListaMaterias extends StatefulWidget {
   @override
@@ -32,12 +33,12 @@ class _ListaMateriasState extends State<ListaMaterias> {
                   children: <Widget>[
                     SpinKitSquareCircle(
 
-                color: Colors.orangeAccent,
+                color: ColorUtils.accentColor,
                   size: 50.0,
                 ),
                     Padding(
                       padding: const EdgeInsets.only(top : 35.0),
-                      child: Text('Carregando...',style: TextStyle(fontWeight: FontWeight.w400,fontSize: 14,color: Colors.black54),),
+                      child: Text('Carregando...',style: TextStyle(fontSize: 14,color: ColorUtils.accentColor),),
                     )
                   ],
                 ),
@@ -66,7 +67,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
           DialogSalvar(context,dao);
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.orange,
+        backgroundColor: ColorUtils.primaryColor,
       ),
     );
   }
@@ -110,7 +111,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
                           "Salvar",
                           style: TextStyle(color: Colors.white),
                         ),
-                        color: Colors.orange,
+                        color: ColorUtils.accentColor,
                       ),
                     )
                   ],

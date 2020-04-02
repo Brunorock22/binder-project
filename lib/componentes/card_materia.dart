@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
+import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class CardMateria extends StatelessWidget {
   Materia materia;
@@ -16,10 +17,13 @@ class CardMateria extends StatelessWidget {
         child: Card(
           child: Row(
             children: <Widget>[
-              Icon(
-                Icons.library_books,
-                color: Colors.orange,
-                size: 30.0,
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: Icon(
+                  Icons.library_books,
+                  color: ColorUtils.primaryColor,
+                  size: 30.0,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),

@@ -1,14 +1,11 @@
-import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:open_file/open_file.dart';
 import 'package:trabalho_sistemas/componentes/dialog_custom.dart';
-import 'package:trabalho_sistemas/componentes/flushbar_custom.dart';
 import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
+import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class Formulario extends StatefulWidget {
   @override
@@ -22,17 +19,25 @@ class _FormularioState extends State<Formulario> {
   DateTime selectedDate;
   TextEditingController dataTextField = new TextEditingController();
   TextEditingController anotacaotField = new TextEditingController();
+  var isPdfPicked = false;
+  var isImagePicked = false;
+
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.materia.anotacoes != null){
       anotacaotField.text = widget.materia.anotacoes;
     }
-    if(widget.materia.dataEscolhida != null){
+    if(widget.materia.dataEscolhida != null) {
       DateTime myDate = DateTime.parse(widget.materia.dataEscolhida);
       dataTextField.text = "${myDate.day}/${myDate.month}/${myDate.year}";
+    }
+    if(widget.materia.pathImg != null){
+      isImagePicked = true;
+    }
+    if(widget.materia.pathPdf != null){
+      isPdfPicked = true;
     }
     anotacaotField.addListener(() {
     widget.materia.anotacoes = anotacaotField.text;
@@ -40,12 +45,13 @@ class _FormularioState extends State<Formulario> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mContext) {
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.orangeAccent[800],
+          backgroundColor: ColorUtils.accentColor ,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -57,10 +63,11 @@ class _FormularioState extends State<Formulario> {
                   child: TextFormField(
                     controller: dataTextField,
                     readOnly: true,
-                    style: TextStyle(color: Colors.orange),
+                    style: TextStyle( color: ColorUtils.accentColor,),
                     decoration: InputDecoration(
                       suffixIcon: Icon(
                         Icons.calendar_today,
+                        color: ColorUtils.accentColor,
                       ),
                       hintStyle: TextStyle(color: Colors.black12),
                       labelText: "Data",
@@ -78,10 +85,11 @@ class _FormularioState extends State<Formulario> {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: TextFormField(
                     controller: anotacaotField,
-                    style: TextStyle(color: Colors.orange),
+                    style: TextStyle( color: ColorUtils.accentColor,),
                     decoration: InputDecoration(
                       suffixIcon: Icon(
                         Icons.text_fields,
+                        color: ColorUtils.accentColor,
                       ),
                       hintStyle: TextStyle(color: Colors.black12),
                       labelText: "Descrição de anatoções",
@@ -104,11 +112,11 @@ class _FormularioState extends State<Formulario> {
                         foregroundDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
                             border: Border.all(
-                                width: 2.0, color: Colors.orangeAccent)),
+                                width: 2.0, color: ColorUtils.primaryColor)),
                         child: Icon(
-                          Icons.photo_camera,
+                          isImagePicked?Icons.done_outline:Icons.photo_camera,
                           size: 40.0,
-                          color: Colors.grey,
+                          color: isImagePicked?Colors.green:ColorUtils.accentColor,
                         )),
                     onTap: () => openFile(FileType.image),
                   ),
@@ -123,11 +131,11 @@ class _FormularioState extends State<Formulario> {
                         foregroundDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
                             border: Border.all(
-                                width: 2.0, color: Colors.orangeAccent)),
+                                width: 2.0, color: ColorUtils.primaryColor)),
                         child: Icon(
-                          Icons.picture_as_pdf,
+                          isPdfPicked?Icons.done_outline:Icons.picture_as_pdf,
                           size: 40.0,
-                          color: Colors.grey,
+                          color:  isPdfPicked?Colors.green:ColorUtils.accentColor,
                         )),
                     onTap: () => openFile(FileType.custom),
                   ),
@@ -138,13 +146,13 @@ class _FormularioState extends State<Formulario> {
                         widget.materia.pathImg == null ||
                         widget.materia.anotacoes == null ||
                         widget.materia.dataEscolhida == null) {
-                      FlusBarCustom(
-                          "Preencha todos os campos.",
-                          context,
-                          Icon(
-                            Icons.error,
-                            color: Colors.orangeAccent,
-                          )).flushbar();
+//                      FlusBarCustom(
+//                          "Preencha todos os campos.",
+//                          context,
+//                          Icon(
+//                            Icons.error,
+//                            color: Colors.orangeAccent,
+//                          )).flushbar();
                     } else {
                       saveDocuments(context);
                     }
@@ -155,9 +163,12 @@ class _FormularioState extends State<Formulario> {
                     width: 100,
                     child: Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.save,
-                          color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.only(left:12.0),
+                          child: Icon(
+                            Icons.save,
+                            color: Colors.white,
+                          ),
                         ),
                         Text(
                           "Salvar",
@@ -166,7 +177,7 @@ class _FormularioState extends State<Formulario> {
                       ],
                     ),
                   ),
-                  color: Colors.orange,
+                  color: ColorUtils.accentColor,
                 ),
 //                RaisedButton(
 //                  onPressed: () {
@@ -205,8 +216,14 @@ class _FormularioState extends State<Formulario> {
     setState(() {
       if (fileType == FileType.image) {
         widget.materia.pathImg = file.path;
+        setState(() {
+          isImagePicked = true;
+        });
       } else {
         widget.materia.pathPdf = file.path;
+        setState(() {
+          isPdfPicked = true;
+        });
       }
     });
   }
@@ -227,7 +244,7 @@ class _FormularioState extends State<Formulario> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SpinKitSquareCircle(
-                      color: Colors.orangeAccent,
+                      color: ColorUtils.primaryColor,
                       size: 50.0,
                     ),
                     Padding(
@@ -263,7 +280,8 @@ class _FormularioState extends State<Formulario> {
       lastDate: DateTime(2030),
       builder: (BuildContext context, Widget child) {
         return Theme(
-          data: ThemeData.light(),
+          isMaterialAppTheme: true,
+          data: ThemeData.dark(),
           child: child,
         );
       },

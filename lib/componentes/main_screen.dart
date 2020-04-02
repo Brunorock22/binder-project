@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trabalho_sistemas/screens/calendar.dart';
 import 'package:trabalho_sistemas/screens/lista_materias.dart';
+import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override
@@ -60,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     new TabItem(Icons.calendar_today, "Calendario", Colors.black54,
         labelStyle:
         TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-    new TabItem(Icons.book, "Materias", Colors.orange,
+    new TabItem(Icons.book, "Materias", ColorUtils.primaryColor,
         labelStyle: TextStyle(color: Colors.orange)),
 
   ]);

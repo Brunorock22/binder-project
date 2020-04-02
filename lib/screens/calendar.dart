@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:trabalho_sistemas/model/special_dates.dart';
+import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class CalendarCustom extends StatefulWidget {
   @override
@@ -29,7 +30,6 @@ class _CalendarCustomState extends State<CalendarCustom> {
       onWillPop: () async => false,
       child: MaterialApp(
         home: Scaffold(
-
                 body: Padding(
                   padding: const EdgeInsets.only(top: 100.0),
                   child: Column(
@@ -46,7 +46,7 @@ class _CalendarCustomState extends State<CalendarCustom> {
                             )),
                         initialCalendarFormat: CalendarFormat.month,
                         calendarStyle: CalendarStyle(
-                          selectedColor: Theme.of(context).primaryColor,
+                          selectedColor: ColorUtils.primaryColor,
                           todayStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,

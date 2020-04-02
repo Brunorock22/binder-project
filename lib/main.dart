@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
-        primaryColor: Colors.black,
-        accentColor: Colors.orangeAccent,
+        primaryColor: Color.fromARGB(255, 242, 171, 80),
+        accentColor: Color.fromARGB(255, 188, 124, 32),
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.black,
           textTheme: ButtonTextTheme.accent,
