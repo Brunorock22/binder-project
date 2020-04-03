@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
+import 'package:trabalho_sistemas/model/materias.dart';
 import 'package:trabalho_sistemas/model/special_dates.dart';
 import 'package:trabalho_sistemas/util/colors_util.dart';
 
@@ -12,6 +14,7 @@ class CalendarCustom extends StatefulWidget {
 class _CalendarCustomState extends State<CalendarCustom> {
   CalendarController _controller;
   Map<DateTime, List> _events = Map();
+  List<Materia> listSpecial = List();
 
   @override
   void initState() {
@@ -30,58 +33,54 @@ class _CalendarCustomState extends State<CalendarCustom> {
       onWillPop: () async => false,
       child: MaterialApp(
         home: Scaffold(
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      TableCalendar(
-                        events: _events,
-                        locale: 'pt_BR',
-                        headerStyle: HeaderStyle(
-                            centerHeaderTitle: true,
-                            formatButtonVisible: false,
-                            titleTextStyle: TextStyle(
-                              fontSize: 25.0,
-                            )),
-                        initialCalendarFormat: CalendarFormat.month,
-                        calendarStyle: CalendarStyle(
-                          selectedColor: ColorUtils.primaryColor,
-                          todayStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                              color: Colors.white),
-                          selectedStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                              color: Colors.white),
-                        ),
-                        calendarController: _controller,
-                        onDaySelected: _onDaySelected,
-                      ),
-                    ],
-                  ),
-                )
-        ),
+            body: Padding(
+          padding: const EdgeInsets.only(top: 100.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              TableCalendar(
+                events: _events,
+                locale: 'pt_BR',
+                headerStyle: HeaderStyle(
+                    centerHeaderTitle: true,
+                    formatButtonVisible: false,
+                    titleTextStyle: TextStyle(
+                      fontSize: 25.0,
+                    )),
+                initialCalendarFormat: CalendarFormat.month,
+                calendarStyle: CalendarStyle(
+                  selectedColor: ColorUtils.primaryColor,
+                  todayStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Colors.white),
+                  selectedStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Colors.white),
+                ),
+                calendarController: _controller,
+                onDaySelected: _onDaySelected,
+              ),
+            ],
+          ),
+        )),
       ),
     );
   }
 
   void _onDaySelected(DateTime day, List events) {
-//    listSpecial.forEach((specialDate) {
-//      DateTime updateDateTime = DateTime.fromMillisecondsSinceEpoch(
-//          specialDate.dataEspecial.millisecondsSinceEpoch);
-//
-//      if (updateDateTime.day == day.day &&
-//          updateDateTime.month == day.month &&
-//          updateDateTime.year == day.year) {
-//        _modalBottomSheetMenu(day, events, specialDate);
-//      }
-//    });
+    listSpecial.forEach((specialDate) {
+      DateTime updateDateTime = DateTime.parse(specialDate.dataEscolhida);
+      if (updateDateTime.day == day.day &&
+          updateDateTime.month == day.month &&
+          updateDateTime.year == day.year) {
+        _modalBottomSheetMenu(day, events, specialDate);
+      }
+    });
   }
 
-  Widget _modalBottomSheetMenu(
-      DateTime day, List events, SpecialDates specialDate) {
+  Widget _modalBottomSheetMenu(DateTime day, List events, Materia specialDate) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -91,46 +90,45 @@ class _CalendarCustomState extends State<CalendarCustom> {
         builder: (builder) {
           return ListView(
             children: <Widget>[
-              Container(
-                color: Colors.transparent,
-                child: new Container(
-                    decoration: new BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(10.0),
-                            topRight: const Radius.circular(10.0))),
-                    child: Container(
-                      height: 150,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.scaleDown,
-                            image: NetworkImage(specialDate.imageData),
-                          ),
-                        ),
-                      ),
-                    )),
-              ),
+//              Container(
+////                color: Colors.transparent,
+////                child: new Container(
+////                    decoration: new BoxDecoration(
+////                        color: Colors.white,
+////                        borderRadius: new BorderRadius.only(
+////                            topLeft: const Radius.circular(10.0),
+////                            topRight: const Radius.circular(10.0))),
+////                    child: Container(
+////                      height: 150,
+////                      child: Container(
+////                        width: MediaQuery.of(context).size.width,
+////                        decoration: BoxDecoration(
+////                          image: DecorationImage(
+////                            fit: BoxFit.scaleDown,
+////                            image: NetworkImage(specialDate.imageData),
+////                          ),
+////                        ),
+////                      ),
+////                    )),
+//              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Center(
                     child: Text(
-                      specialDate.tituloData,
-                      style: TextStyle(fontSize: 20, fontFamily: 'Helvetica'),
-                      textAlign: TextAlign.start,
-                    )),
+                  specialDate.anotacoes,
+                  style: TextStyle(fontSize: 20, fontFamily: 'Helvetica'),
+                  textAlign: TextAlign.start,
+                )),
               ),
               Padding(
                   padding: const EdgeInsets.all(10),
-
-                  child: Text("Texto do bottom sheet")
-              )],
+                  child: Text("Texto do bottom sheet"))
+            ],
           );
         });
   }
 
-  Future<Map<DateTime, List>> getSpecialDates() async {
+  Future<List<Materia>> getSpecialDates() async {
 //    var querySnapshot =
 //    await Firestore.instance.collection("datas_especiais").getDocuments();
 //
@@ -151,5 +149,14 @@ class _CalendarCustomState extends State<CalendarCustom> {
 //      });
 //    });
 //    print(_events);
+    MateriaDao dao = MateriaDao();
+    dao.findAll().then((datas) {
+      datas.forEach((data) {
+        DateTime updateDateTime = DateTime.parse(data.dataEscolhida);
+        setState(() {
+        _events.putIfAbsent(updateDateTime, () => [data]);
+        });
+      });
+    });
   }
 }

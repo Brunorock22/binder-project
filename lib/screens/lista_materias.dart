@@ -31,7 +31,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SpinKitSquareCircle(
+                    SpinKitPouringHourglass(
 
                 color: ColorUtils.accentColor,
                   size: 50.0,

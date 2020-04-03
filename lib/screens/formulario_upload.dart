@@ -49,6 +49,7 @@ class _FormularioState extends State<Formulario> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          title: Text(widget.materia.nomeMateria,style: TextStyle(color: Colors.white),),
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: ColorUtils.accentColor,
         ),
@@ -162,7 +163,7 @@ class _FormularioState extends State<Formulario> {
                           mContext,
                           Icon(
                             Icons.error,
-                            color: Colors.orangeAccent,
+                            color: Colors.red,
                           )).flushbar();
                     } else {
                       saveDocuments(mContext);
