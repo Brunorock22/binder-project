@@ -21,7 +21,7 @@ class CardMateria extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 25.0),
                 child: Icon(
                   Icons.library_books,
-                  color: ColorUtils.primaryColor,
+                  color: ColorUtils.accentColor,
                   size: 30.0,
                 ),
               ),

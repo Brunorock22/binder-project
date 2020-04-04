@@ -40,4 +40,17 @@ class MateriaDao{
     }
     return materias;
   }
+
+  Future<void> delete(int id) async {
+    // Get a reference to the database.
+    final db = await getDatabase();
+    // Remove from the Database.
+    await db.delete(
+      'materia',
+      // Use a `where` clause to delete a specific dog.
+      where: "id = ?",
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: [id],
+    );
+  }
 }

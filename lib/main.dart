@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trabalho_sistemas/screens/splash_config.dart';
 
 import 'componentes/main_screen.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: [const Locale('pt', 'BR')],
       initialRoute: '/main' ,
       routes: {
-        '/main' : (mContext) => BottomNavBar(),
+        '/main' : (mContext) => SplashConfig(),
 
       },
       localizationsDelegates: [

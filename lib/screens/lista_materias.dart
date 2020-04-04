@@ -1,6 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trabalho_sistemas/componentes/card_materia.dart';
+import 'package:trabalho_sistemas/componentes/dialog_custom.dart';
+import 'package:trabalho_sistemas/componentes/main_screen.dart';
 import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
 import 'package:trabalho_sistemas/screens/formulario_upload.dart';
@@ -20,9 +23,10 @@ class _ListaMateriasState extends State<ListaMaterias> {
 
     return Scaffold(
       body: FutureBuilder(
-        future: Future.delayed(Duration(seconds: 1)).then((value) => dao.findAll()),
-        builder: (context, snapshot){
-          switch(snapshot.connectionState){
+        future:
+            Future.delayed(Duration(seconds: 1)).then((value) => dao.findAll()),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
@@ -32,30 +36,80 @@ class _ListaMateriasState extends State<ListaMaterias> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SpinKitPouringHourglass(
-
-                color: ColorUtils.accentColor,
-                  size: 50.0,
-                ),
+                      color: ColorUtils.accentColor,
+                      size: 50.0,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(top : 35.0),
-                      child: Text('Carregando...',style: TextStyle(fontSize: 14,color: ColorUtils.accentColor),),
+                      padding: const EdgeInsets.only(top: 35.0),
+                      child: Text(
+                        'Carregando...',
+                        style: TextStyle(
+                            fontSize: 14, color: ColorUtils.accentColor),
+                      ),
                     )
                   ],
                 ),
               );
               break;
             case ConnectionState.active:
-                break;
+              break;
             case ConnectionState.done:
               final List<Materia> materias = snapshot.data;
               return ListView.builder(
                   itemCount: materias.length,
-                  itemBuilder: (context, indice) {
+                  itemBuilder: (mContext, indice) {
                     final Materia materia = materias[indice];
                     return GestureDetector(
                         child: CardMateria(materia),
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Formulario(materia)))
-                    );
+                        onTap: () => Navigator.push(
+                            mContext,
+                            MaterialPageRoute(
+                                builder: (context) => Formulario(materia))),
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // return object of type Dialog
+                              return AlertDialog(
+                                title: new Text("Deseja Apagar Este Item?"),
+                                content: new Text("O item será apagado ao clicar em ""Sim""..."),
+                                actions: <Widget>[
+                                  // usually buttons at the bottom of the dialog
+                                  new FlatButton(
+                                    child: new Text("Não"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  new FlatButton(
+                                    child: new Text("Sim"),
+                                    onPressed: () {
+                                      setState(() {
+                                        dao.delete(materia.id);
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+
+                                ],
+                              );
+                            },
+                          );
+
+//                          AwesomeDialog(
+//                              context: context,
+//                              headerAnimationLoop: false,
+//                              dialogType: DialogType.WARNING,
+//                              animType: AnimType.BOTTOMSLIDE,
+//                              tittle: "Deseja deletar esse item?",
+//                              desc:
+//                              "Ao clicar Ok o item será apagado da sua lista de materias...",
+//                              btnCancelOnPress: () {},
+//                              dismissOnTouchOutside: false,
+//                              btnOkOnPress: () {
+//
+//                              }).show();
+                        });
                   });
               break;
           }
@@ -64,7 +118,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          DialogSalvar(context,dao);
+          DialogSalvar(context, dao);
         },
         child: Icon(Icons.add),
         backgroundColor: ColorUtils.primaryColor,
@@ -72,7 +126,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
     );
   }
 
-  void DialogSalvar(BuildContext context,MateriaDao dao) {
+  void DialogSalvar(BuildContext context, MateriaDao dao) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -100,7 +154,10 @@ class _ListaMateriasState extends State<ListaMaterias> {
                         onPressed: () {
                           print(nomeMateriaController.text);
                           setState(() {
-                            dao.save(Materia( nomeMateria: nomeMateriaController.text)).then((value){
+                            dao
+                                .save(Materia(
+                                    nomeMateria: nomeMateriaController.text))
+                                .then((value) {
                               print(value);
                             });
                             nomeMateriaController.text = "";

@@ -49,7 +49,10 @@ class _FormularioState extends State<Formulario> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.materia.nomeMateria,style: TextStyle(color: Colors.white),),
+          title: Text(
+            widget.materia.nomeMateria,
+            style: TextStyle(color: Colors.white),
+          ),
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: ColorUtils.accentColor,
         ),
@@ -84,6 +87,61 @@ class _FormularioState extends State<Formulario> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.only(left: 30.0),
+                  child: Row(
+                    children: <Widget>[
+                      Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: GestureDetector(
+                          child: Container(
+                              height: 100,
+                              width: 100,
+                              foregroundDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(
+                                      width: 2.0,
+                                      color: ColorUtils.primaryColor)),
+                              child: Icon(
+                                isImagePicked
+                                    ? Icons.done_outline
+                                    : Icons.photo_camera,
+                                size: 40.0,
+                                color: isImagePicked
+                                    ? Colors.green
+                                    : ColorUtils.accentColor,
+                              )),
+                          onTap: () => saveFile(FileType.image),
+                        ),
+                      )),
+                      Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: GestureDetector(
+                          child: Container(
+                              height: 100,
+                              width: 100,
+                              foregroundDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(
+                                      width: 2.0,
+                                      color: ColorUtils.primaryColor)),
+                              child: Icon(
+                                isPdfPicked
+                                    ? Icons.done_outline
+                                    : Icons.picture_as_pdf,
+                                size: 40.0,
+                                color: isPdfPicked
+                                    ? Colors.green
+                                    : ColorUtils.accentColor,
+                              )),
+                          onTap: () => saveFile(FileType.custom),
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: TextFormField(
                     controller: anotacaotField,
@@ -100,58 +158,9 @@ class _FormularioState extends State<Formulario> {
                       enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.grey, width: 2.0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 2.0)),
                     ),
                   ),
                 ),
-                Center(
-                    child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: GestureDetector(
-                    child: Container(
-                        height: 100,
-                        width: 100,
-                        foregroundDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(
-                                width: 2.0, color: ColorUtils.primaryColor)),
-                        child: Icon(
-                          isImagePicked
-                              ? Icons.done_outline
-                              : Icons.photo_camera,
-                          size: 40.0,
-                          color: isImagePicked
-                              ? Colors.green
-                              : ColorUtils.accentColor,
-                        )),
-                    onTap: () => openFile(FileType.image),
-                  ),
-                )),
-                Center(
-                    child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: GestureDetector(
-                    child: Container(
-                        height: 100,
-                        width: 100,
-                        foregroundDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(
-                                width: 2.0, color: ColorUtils.primaryColor)),
-                        child: Icon(
-                          isPdfPicked
-                              ? Icons.done_outline
-                              : Icons.picture_as_pdf,
-                          size: 40.0,
-                          color: isPdfPicked
-                              ? Colors.green
-                              : ColorUtils.accentColor,
-                        )),
-                    onTap: () => openFile(FileType.custom),
-                  ),
-                )),
                 RaisedButton(
                   onPressed: () {
                     if (widget.materia.pathPdf == null ||
@@ -190,30 +199,6 @@ class _FormularioState extends State<Formulario> {
                   ),
                   color: ColorUtils.accentColor,
                 ),
-//                RaisedButton(
-//                  onPressed: () {
-//                    OpenFile.open(files[1].path).catchError((e) {
-//                      print(e);
-//                    });
-//                  },
-//                  child: Container(
-//                    height: 50,
-//                    width: 100,
-//                    child: Row(
-//                      children: <Widget>[
-//                        Icon(
-//                          Icons.open_in_browser,
-//                          color: Colors.white,
-//                        ),
-//                        Text(
-//                          "Ultimo Arquivo",
-//                          style: TextStyle(color: Colors.white),
-//                        ),
-//                      ],
-//                    ),
-//                  ),
-//                  color: Colors.orange,
-//                ),
               ],
             ),
           ),
@@ -222,7 +207,7 @@ class _FormularioState extends State<Formulario> {
     );
   }
 
-  void openFile(FileType fileType) async {
+  void saveFile(FileType fileType) async {
     var file = await FilePicker.getFile(type: fileType, fileExtension: "PDF");
     setState(() {
       if (fileType == FileType.image) {
@@ -242,7 +227,7 @@ class _FormularioState extends State<Formulario> {
   Future<void> saveDocuments(BuildContext mContext) async {
     MateriaDao dao = MateriaDao();
     dao.update(widget.materia).then((value) {
-      DialogCustom.showCustomDialog(mContext, "Salvo com Sucesso",
+      DialogCustom.showSaveCustomDialog(mContext, "Salvo com Sucesso",
           "Dados foram salvos no lembrete", DialogType.SUCCES);
     });
   }

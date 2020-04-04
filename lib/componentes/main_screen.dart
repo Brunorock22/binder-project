@@ -14,6 +14,10 @@ class BottomNavBar extends StatefulWidget {
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
   static int pos = 0;
+  int positionSelector;
+
+
+  BottomNavBar({this.positionSelector});
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
@@ -23,8 +27,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    if(widget.positionSelector != null){
+      setState(() {
+      BottomNavBar.pos = widget.positionSelector;
+      });
+    }
   }
 
 

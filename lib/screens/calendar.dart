@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
 import 'package:trabalho_sistemas/model/materias.dart';
-import 'package:trabalho_sistemas/model/special_dates.dart';
+import 'package:open_file/open_file.dart';
 import 'package:trabalho_sistemas/util/colors_util.dart';
 
 class CalendarCustom extends StatefulWidget {
@@ -90,71 +90,82 @@ class _CalendarCustomState extends State<CalendarCustom> {
         builder: (builder) {
           return ListView(
             children: <Widget>[
-//              Container(
-////                color: Colors.transparent,
-////                child: new Container(
-////                    decoration: new BoxDecoration(
-////                        color: Colors.white,
-////                        borderRadius: new BorderRadius.only(
-////                            topLeft: const Radius.circular(10.0),
-////                            topRight: const Radius.circular(10.0))),
-////                    child: Container(
-////                      height: 150,
-////                      child: Container(
-////                        width: MediaQuery.of(context).size.width,
-////                        decoration: BoxDecoration(
-////                          image: DecorationImage(
-////                            fit: BoxFit.scaleDown,
-////                            image: NetworkImage(specialDate.imageData),
-////                          ),
-////                        ),
-////                      ),
-////                    )),
-//              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Center(
                     child: Text(
-                  specialDate.anotacoes,
+                  specialDate.nomeMateria,
                   style: TextStyle(fontSize: 20, fontFamily: 'Helvetica'),
                   textAlign: TextAlign.start,
                 )),
               ),
               Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Row(
+                  children: <Widget>[
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: GestureDetector(
+                        child: Container(
+                            height: 100,
+                            width: 100,
+                            foregroundDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                border: Border.all(
+                                    width: 2.0, color: ColorUtils.primaryColor)),
+                            child: Icon(
+                              Icons.photo_camera,
+                              size: 40.0,
+                              color: ColorUtils.accentColor,
+                            )),
+                        onTap: () =>
+                            OpenFile.open(specialDate.pathImg).catchError((e) {
+                              print(e);
+                            }),
+                      ),
+                    )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: GestureDetector(
+                        child: Container(
+                            height: 100,
+                            width: 100,
+                            foregroundDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                border: Border.all(
+                                    width: 2.0, color: ColorUtils.primaryColor)),
+                            child: Icon(
+                              Icons.picture_as_pdf,
+                              size: 40.0,
+                              color: ColorUtils.accentColor,
+                            )),
+                        onTap: () => //
+                         OpenFile.open(specialDate.pathPdf).catchError((e) {
+                        print(e);
+                      }),
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+              Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text("Texto do bottom sheet"))
+                  child: Text(specialDate.anotacoes))
             ],
           );
         });
   }
 
   Future<List<Materia>> getSpecialDates() async {
-//    var querySnapshot =
-//    await Firestore.instance.collection("datas_especiais").getDocuments();
-//
-//    var items = querySnapshot.documents;
-//
-//    var list = items.map((DocumentSnapshot docSnapshot) {
-//      return docSnapshot.data;
-//    }).toList();
-//    setState(() {
-//      list.forEach((l) {
-//        print(l['data_especial']);
-//        DateTime updateDateTime = DateTime.fromMillisecondsSinceEpoch(
-//            l['data_especial'].millisecondsSinceEpoch);
-//        _events.putIfAbsent(updateDateTime, () => [l['titulo_data']]);
-//
-//        listSpecial.add(new SpecialDates(l['data_especial'], l['titulo_data'],
-//            l['descricao_data'], l['imagem_data']));
-//      });
-//    });
-//    print(_events);
     MateriaDao dao = MateriaDao();
     dao.findAll().then((datas) {
+      listSpecial = datas;
       datas.forEach((data) {
         DateTime updateDateTime = DateTime.parse(data.dataEscolhida);
         setState(() {
-        _events.putIfAbsent(updateDateTime, () => [data]);
+          _events.putIfAbsent(updateDateTime, () => [data]);
         });
       });
     });
