@@ -86,60 +86,56 @@ class _FormularioState extends State<Formulario> {
                     onTap: () => datePicker(context),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30.0),
-                  child: Row(
-                    children: <Widget>[
-                      Center(
-                          child: Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: GestureDetector(
-                          child: Container(
-                              height: 100,
-                              width: 100,
-                              foregroundDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  border: Border.all(
-                                      width: 2.0,
-                                      color: ColorUtils.primaryColor)),
-                              child: Icon(
-                                isImagePicked
-                                    ? Icons.done_outline
-                                    : Icons.photo_camera,
-                                size: 40.0,
-                                color: isImagePicked
-                                    ? Colors.green
-                                    : ColorUtils.accentColor,
-                              )),
-                          onTap: () => saveFile(FileType.image),
-                        ),
-                      )),
-                      Center(
-                          child: Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: GestureDetector(
-                          child: Container(
-                              height: 100,
-                              width: 100,
-                              foregroundDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  border: Border.all(
-                                      width: 2.0,
-                                      color: ColorUtils.primaryColor)),
-                              child: Icon(
-                                isPdfPicked
-                                    ? Icons.done_outline
-                                    : Icons.picture_as_pdf,
-                                size: 40.0,
-                                color: isPdfPicked
-                                    ? Colors.green
-                                    : ColorUtils.accentColor,
-                              )),
-                          onTap: () => saveFile(FileType.custom),
-                        ),
-                      )),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: GestureDetector(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        foregroundDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                                width: 2.0,
+                                color: ColorUtils.primaryColor)),
+                        child: Icon(
+                          isImagePicked
+                              ? Icons.done_outline
+                              : Icons.photo_camera,
+                          size: 40.0,
+                          color: isImagePicked
+                              ? Colors.green
+                              : ColorUtils.accentColor,
+                        )),
+                    onTap: () => saveFile(FileType.image),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: GestureDetector(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        foregroundDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                                width: 2.0,
+                                color: ColorUtils.primaryColor)),
+                        child: Icon(
+                          isPdfPicked
+                              ? Icons.done_outline
+                              : Icons.picture_as_pdf,
+                          size: 40.0,
+                          color: isPdfPicked
+                              ? Colors.green
+                              : ColorUtils.accentColor,
+                        )),
+                    onTap: () => saveFile(FileType.custom),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
@@ -154,10 +150,13 @@ class _FormularioState extends State<Formulario> {
                         color: ColorUtils.accentColor,
                       ),
                       hintStyle: TextStyle(color: Colors.black12),
-                      labelText: "Descrição de anatoções",
+                      labelText: "Descrição de anotações",
                       enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 2.0)),
+                          BorderSide(color: Colors.grey, width: 2.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.grey, width: 2.0)),
                     ),
                   ),
                 ),

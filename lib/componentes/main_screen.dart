@@ -67,10 +67,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   List<TabItem> tabItems = List.of([
     new TabItem(Icons.calendar_today, "Calendario", Colors.black54,
-        labelStyle:
-        TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
     new TabItem(Icons.book, "Materias", ColorUtils.primaryColor,
-        labelStyle: TextStyle(color: Colors.orange)),
+        labelStyle: TextStyle(color: ColorUtils.primaryColor, fontWeight: FontWeight.bold)),
 
   ]);
 
@@ -84,11 +83,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
     page ??= CalendarCustom();
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.orangeAccent,
+        primaryColor:ColorUtils.primaryColor,
         accentColor: Colors.black,
-        backgroundColor: Colors.orange,
+        backgroundColor: ColorUtils.accentColor,
         buttonTheme: ButtonThemeData(
-          buttonColor: Colors.orangeAccent,
+          buttonColor: ColorUtils.accentColor,
           textTheme: ButtonTextTheme.primary,
         ),
       ),

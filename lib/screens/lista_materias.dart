@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trabalho_sistemas/componentes/card_materia.dart';
@@ -70,18 +71,17 @@ class _ListaMateriasState extends State<ListaMaterias> {
                             context: context,
                             builder: (BuildContext context) {
                               // return object of type Dialog
-                              return AlertDialog(
-                                title: new Text("Deseja Apagar Este Item?"),
-                                content: new Text("O item será apagado ao clicar em ""Sim""..."),
+                              return CupertinoAlertDialog(
+                                title: new Text("Deseja Apagar o Item?"),
                                 actions: <Widget>[
                                   // usually buttons at the bottom of the dialog
-                                  new FlatButton(
+                                  new CupertinoDialogAction(
                                     child: new Text("Não"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
                                   ),
-                                  new FlatButton(
+                                  new CupertinoDialogAction(
                                     child: new Text("Sim"),
                                     onPressed: () {
                                       setState(() {
@@ -90,25 +90,10 @@ class _ListaMateriasState extends State<ListaMaterias> {
                                       Navigator.of(context).pop();
                                     },
                                   ),
-
                                 ],
                               );
                             },
                           );
-
-//                          AwesomeDialog(
-//                              context: context,
-//                              headerAnimationLoop: false,
-//                              dialogType: DialogType.WARNING,
-//                              animType: AnimType.BOTTOMSLIDE,
-//                              tittle: "Deseja deletar esse item?",
-//                              desc:
-//                              "Ao clicar Ok o item será apagado da sua lista de materias...",
-//                              btnCancelOnPress: () {},
-//                              dismissOnTouchOutside: false,
-//                              btnOkOnPress: () {
-//
-//                              }).show();
                         });
                   });
               break;
@@ -149,7 +134,7 @@ class _ListaMateriasState extends State<ListaMaterias> {
                       ),
                     ),
                     SizedBox(
-                      width: 320.0,
+                      width: double.infinity,
                       child: RaisedButton(
                         onPressed: () {
                           print(nomeMateriaController.text);
