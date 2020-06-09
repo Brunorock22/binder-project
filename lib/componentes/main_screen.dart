@@ -67,9 +67,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   List<TabItem> tabItems = List.of([
     new TabItem(Icons.calendar_today, "Calendario", Colors.black54,
-        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w300)),
     new TabItem(Icons.book, "Materias", ColorUtils.primaryColor,
-        labelStyle: TextStyle(color: ColorUtils.primaryColor, fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w300)),
 
   ]);
 
@@ -81,17 +81,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     page ??= CalendarCustom();
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor:ColorUtils.primaryColor,
-        accentColor: Colors.black,
-        backgroundColor: ColorUtils.accentColor,
-        buttonTheme: ButtonThemeData(
-          buttonColor: ColorUtils.accentColor,
-          textTheme: ButtonTextTheme.primary,
-        ),
-      ),
-      home: Scaffold(
+    return Scaffold(
         body: page,
         bottomNavigationBar: CircularBottomNavigation(
           tabItems,
@@ -101,7 +91,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           },
           barBackgroundColor: Colors.white70,
         ),
-      ),
     );
   }
 

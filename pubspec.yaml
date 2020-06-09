@@ -30,7 +30,7 @@ dependencies:
   flutter_spinkit: "^4.1.2"
   path:
   awesome_dialog:
-  flushbar: 1.9.1
+  flushbar: ^1.10.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,7 +55,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
 
   assets:
-    - assets/images/icon_pita.png
+    - assets/images/icon_pita.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

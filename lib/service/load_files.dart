@@ -26,8 +26,7 @@ class _LoadFilesState extends State<LoadFiles> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
+    return Scaffold(
         appBar: new AppBar(
           title: const Text('Plugin example app'),
         ),
@@ -42,8 +41,7 @@ class _LoadFilesState extends State<LoadFiles> {
               ),
             ],
           ),
-        ),
-      ),
+        )
     );
   }
 }

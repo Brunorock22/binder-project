@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   initState() {
     super.initState();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
+        duration: const Duration(milliseconds: 1000), vsync: this);
     animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
 
     /*animation.addStatusListener((status) {
@@ -42,8 +42,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   children: <Widget>[
                     Center(
                       child: Container(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Image.asset("assets/images/icon_pita.png")
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Image.asset("assets/images/icon_pita.jpg")
                       ),
                     ),
 //                    Padding(

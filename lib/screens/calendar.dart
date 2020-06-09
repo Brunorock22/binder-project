@@ -31,8 +31,7 @@ class _CalendarCustomState extends State<CalendarCustom> {
 
     return WillPopScope(
       onWillPop: () async => false,
-      child: MaterialApp(
-        home: Scaffold(
+      child:  Scaffold(
             body: Padding(
           padding: const EdgeInsets.only(top: 100.0),
           child: SingleChildScrollView(
@@ -66,8 +65,8 @@ class _CalendarCustomState extends State<CalendarCustom> {
               ],
             ),
           ),
-        )),
-      ),
+        ))
+
     );
   }
 
@@ -84,6 +83,7 @@ class _CalendarCustomState extends State<CalendarCustom> {
 
   Widget _modalBottomSheetMenu(DateTime day, List events, Materia specialDate) {
     showModalBottomSheet(
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
