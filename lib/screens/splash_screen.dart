@@ -15,15 +15,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     controller = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
-
-    /*animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });*/
-
     controller.forward();
   }
 
@@ -46,10 +37,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           child: Image.asset("assets/images/icon_pita.jpg")
                       ),
                     ),
-//                    Padding(
-//                      padding: const EdgeInsets.only(top: 100.0),
-//                      child: Text("Developed by Bruno Camargos",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 11,color: Colors.black54),),
-//                    )
                   ],
                 ),
               ),

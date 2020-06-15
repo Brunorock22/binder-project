@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trabalho_sistemas/componentes/dialog_custom.dart';
 import 'package:trabalho_sistemas/componentes/flushbar_custom.dart';
 import 'package:trabalho_sistemas/database/dao/materia_dao.dart';
